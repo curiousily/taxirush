@@ -1,12 +1,18 @@
 -module(taxi).
+
 -compile(export_all).
+
+start_working() ->
+	DispatcherPid = rpc:call('dispatcher@vini-laptop', erlang, whereis, [dispatcherPid]),
+	TaxiPid = spawn(taxi, receive_job,[]),
+	dispatcher:taxi_is_available(DispatcherPid, TaxiPid).
 
 receive_job() ->
 	receive
 		{job_offer, Pid, Client} ->
 %			io:format("Received job offer~n"),
 			receive_job_offer(Client),
-			% should wait some time before doing this
+			timer:sleep(5000),
 			deliver_client(Client),
 %			io:format("Taxi is available again~n"),
 			dispatcher:taxi_is_available(Pid, self())
@@ -17,5 +23,4 @@ receive_job_offer(Client) ->
 	io:format("Job taken from dispatcher for client: ~p~n", [Client]).
 
 deliver_client(Client) ->
-	timer:sleep(20000),
 	io:format("Client ~p is delivered to the destionation~n", [Client]).

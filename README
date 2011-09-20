@@ -1,0 +1,29 @@
+Taxi Rush is a taxi company simulation
+The process that is simulated is simple:
+1. The client to a dispatcher for a taxi
+	If taxi is available
+		the taxi takes the job
+	Else
+		client calls to the dispatcher after certain amount of time
+2. After a taxi completes his job, he calls to the dispatcher to be considered for next job
+
+================ How To Run It ================
+
+On the first node do the following:
+
+erl -name dispatcher@vini.bg -setcookie taxirush
+c(taxirush).
+taxirush:run_simulation().
+
+On the second (and consecutive) node(s):
+
+edit the hosts file to include the host like this
+
+ADDRESS e.g. 192.168.1.1 vini.bg
+
+erl -name taxi1@taxies.bg -setcookie taxirush
+net_adm:ping(dispatcher@vini.bg).
+c(taxi).
+taxi:start_working().
+
+Enjoy the results!
