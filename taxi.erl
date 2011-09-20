@@ -3,7 +3,7 @@
 -compile(export_all).
 
 start_working() ->
-	DispatcherPid = rpc:call('dispatcher@vini-laptop', erlang, whereis, [dispatcherPid]),
+	DispatcherPid = rpc:call('dispatcher@vini.bg', erlang, whereis, [dispatcherPid]),
 	TaxiPid = spawn(taxi, receive_job,[]),
 	dispatcher:taxi_is_available(DispatcherPid, TaxiPid).
 
